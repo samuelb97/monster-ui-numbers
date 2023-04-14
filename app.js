@@ -1,44 +1,60 @@
-define("apps/numbers/app", ["require", "jquery", "monster"], function (e) {
-    var t = e("jquery"),
-        n = e("monster");
-    return {
-        name: "numbers",
-        css: ["app"],
-        i18n: { "en-US": { customCss: !1 }, "fr-FR": { customCss: !1 }, "ru-RU": { customCss: !1 } },
-        requests: {},
-        subscribe: {},
-        load: function (e) {
-            var t = this;
-            t.initApp(function () {
-                e && e(t);
-            });
-        },
-        initApp: function (e) {
-            var t = this;
-            n.pub("auth.initApp", { app: t, callback: e });
-        },
-        render: function (e) {
-            var s = this,
-                e = e || t("#monster_content"),
-                r = t(s.getTemplate({ name: "app" }));
-            n.pub("common.numbers.render", {
-                container: r,
-                callbackAfterRender: function (t) {
-                    e.empty().append(t);
-                },
-            });
-        },
-    };
-}),
-    (this.monster = this.monster || {}),
-    (this.monster.cache = this.monster.cache || {}),
-    (this.monster.cache.templates = this.monster.cache.templates || {}),
-    (this.monster.cache.templates.numbers = this.monster.cache.templates.numbers || {}),
-    (this.monster.cache.templates.numbers._main = this.monster.cache.templates.numbers._main || {}),
-    (this.monster.cache.templates.numbers._main.app = Handlebars.template({
-        compiler: [8, ">= 4.3.0"],
-        main: function (e, t, n, s, r) {
-            return '<div id="number_manager">\n\n</div>\n';
-        },
-        useData: !0,
-    }));
+define(function(require) {
+	var $ = require('jquery'),
+		monster = require('monster');
+
+	var app = {
+		name: 'numbers',
+
+		css: [ 'app' ],
+
+		i18n: {
+			'en-US': { customCss: false },
+			'fr-FR': { customCss: false },
+			'ru-RU': { customCss: false }
+		},
+
+		requests: {
+		},
+
+		subscribe: {
+		},
+
+		load: function(callback) {
+			var self = this;
+
+			self.initApp(function() {
+				callback && callback(self);
+			});
+		},
+
+		initApp: function(callback) {
+			var self = this;
+
+			monster.pub('auth.initApp', {
+				app: self,
+				callback: callback
+			});
+		},
+
+		render: function(parent) {
+			var self = this,
+				parent = parent || $('#monster_content');
+
+			var numberManager = $(self.getTemplate({
+				name: 'app'
+			}));
+
+			monster.pub('common.numbers.render', {
+				container: numberManager,
+				callbackAfterRender: function(numberControl) {
+					parent
+						.empty()
+						.append(numberControl);
+				}
+			});
+		}
+	};
+
+	return app;
+});
+
